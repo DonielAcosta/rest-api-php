@@ -2,6 +2,7 @@
 
 $matches = [];
 
+/* Checking the URL for the resource type and resource id. */
 if (preg_match('/\/([^\/]+)\/([^\/]+)/', $_SERVER["REQUEST_URI"], $matches)) {
     $_GET['resource_type'] = $matches[1];
     $_GET['resource_id'] = $matches[2];

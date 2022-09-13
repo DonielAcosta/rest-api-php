@@ -37,12 +37,21 @@ $books = [
 
 header( 'Content-Type: application/json' );
 
+// LEVANTAMOS EL ID DEL RECURSO BUSCADO
+$resourceId = array_key_exists('resource_id', $_GET) ? $_GET['resource_id'] : '';
+
 /* Checking the request method and then executing the code for that method. */
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ( strtoupper( $method ) ) {
   case 'GET';
-    echo json_encode($books);
+    if( empty($resourceId)){
+      echo json_encode($books);
+    }else{
+      if(array_key_exists( $resourceId, $books )){
+        echo json_encode($books[$resourceId]);
+      }
+    }
     break;
   case 'POST':
     break;

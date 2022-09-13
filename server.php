@@ -57,10 +57,19 @@ switch ( strtoupper( $method ) ) {
     $json = file_get_contents('php://input');
 
     $books[] =json_decode($json, true);
-    // echo array_keys($books)[count($books) -1 ];
-    echo json_encode($books);
+    // emitimos hacia la salida de la ultima clave del array
+    echo array_keys($books)[count($books) -1 ];
+    // echo json_encode($books);
     break;
   case 'PUT':
+    //validar que el recurso exista
+    if( !empty($resourceId) && array_key_exists($resourceId, $books)){
+      $json = file_get_contents('php://input');
+
+      $books[$resourceId] =json_decode($json, true);
+      echo json_encode($books);
+
+    }
       break;
   case 'DELETE':
     break;

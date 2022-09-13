@@ -54,94 +54,14 @@ switch ( strtoupper( $method ) ) {
     }
     break;
   case 'POST':
+    $json = file_get_contents('php://input');
+
+    $books[] =json_decode($json, true);
+    // echo array_keys($books)[count($books) -1 ];
+    echo json_encode($books);
     break;
   case 'PUT':
       break;
   case 'DELETE':
     break;
 }
-// if ( !in_array( $resourceType, $allowedResourceTypes ) ) {
-// 	http_response_code( 400 );
-// 	echo json_encode(
-// 		[
-// 			'error' => "$resourceType is un unkown",
-// 		]
-// 	);
-	
-// 	die;
-// }
-
-
-
-// $resourceId = array_key_exists('resource_id', $_GET ) ? $_GET['resource_id'] : '';
-// $method = $_SERVER['REQUEST_METHOD'];
-
-// switch ( strtoupper( $method ) ) {
-// 	case 'GET':
-// 		if ( "books" !== $resourceType ) {
-// 			http_response_code( 404 );
-
-// 			echo json_encode(
-// 				[
-// 					'error' => $resourceType.' not yet implemented :(',
-// 				]
-// 			);
-
-// 			die;
-// 		}
-
-// 		if ( !empty( $resourceId ) ) {
-// 			if ( array_key_exists( $resourceId, $books ) ) {
-// 				echo json_encode(
-// 					$books[ $resourceId ]
-// 				);
-// 			} else {
-// 				http_response_code( 404 );
-
-// 				echo json_encode(
-// 					[
-// 						'error' => 'Book '.$resourceId.' not found :(',
-// 					]
-// 				);
-// 			}
-// 		} else {
-// 			echo json_encode(
-// 				$books
-// 			);
-// 		}
-
-// 		die;
-		
-// 		break;
-// 	case 'POST':
-// 		$json = file_get_contents( 'php://input' );
-
-// 		$books[] = json_decode( $json );
-
-// 		echo array_keys($books)[count($books)-1];
-// 		break;
-// 	case 'PUT':
-// 		if ( !empty($resourceId) && array_key_exists( $resourceId, $books ) ) {
-// 			$json = file_get_contents( 'php://input' );
-			
-// 			$books[ $resourceId ] = json_decode( $json, true );
-
-// 			echo $resourceId;
-// 		}
-// 		break;
-// 	case 'DELETE':
-// 		if ( !empty($resourceId) && array_key_exists( $resourceId, $books ) ) {
-// 			unset( $books[ $resourceId ] );
-// 		}
-// 		break;
-// 	default:
-// 		http_response_code( 404 );
-
-// 		echo json_encode(
-// 			[
-// 				'error' => $method.' not yet implemented :(',
-// 			]
-// 		);
-
-// 		break;
-// }

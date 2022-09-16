@@ -49,4 +49,27 @@
   </table>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+  <script type="text/javascript">
+    $('#loadBooks').click(function(){
+        $('#messages').first('p').text('Cargando Libros..');
+        $('#messages').hidden;
+        $.ajax({
+            'url': 'http//localhost:8000/books',
+            'success': function(data){
+              $('#messages').show;
+              $('#booksTable > tbody').empty();
+              for(b in data){
+                addBook(data[b]);   
+              }
+              $('#bookForm').show();
+            }
+          }
+        );
+    });
+    function addBook(book){
+      $('#booksTable tr:last').after('<tr><td>' + book.title + '</td><td>' + book.id_autor +  '</td><td>' + book.id_genero + '</td></tr>');
+    }
+  </script>
 </html>

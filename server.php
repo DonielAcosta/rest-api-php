@@ -36,9 +36,15 @@ $allowedResourceTypes = [
 /* Getting the value of the key 'resource_type' from the  array. */
 $resourceType = $_GET['resource_type'];
 
-if(!in_array($resourceType, $allowedResourceTypes)){
-
-  die;
+if ( !in_array( $resourceType, $allowedResourceTypes ) ) {
+	header( 'Status-Code: 400' );
+	echo json_encode(
+		[
+			'error' => "$resourceType is un unkown",
+		]
+	);
+	
+	die;
 }
 
 /* Creating an array of books. */
@@ -75,6 +81,8 @@ switch ( strtoupper( $method ) ) {
     }else{
       if(array_key_exists( $resourceId, $books )){
         echo json_encode($books[$resourceId]);
+      }else{
+        http_response_code(404);
       }
     }
     break;

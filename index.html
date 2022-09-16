@@ -27,7 +27,7 @@
       <hr/>
       <table>
         <tr>
-          <td>Titululo:</td>
+          <td>Titulo:</td>
           <td><input type="text" id="bookTitle" name="bookTitle"/></td>
           <td></td>
         </tr>
@@ -54,7 +54,7 @@
   <script type="text/javascript">
     $('#loadBooks').click(function(){
         $('#messages').first('p').text('Cargando Libros..');
-        $('#messages').hidden;
+        $('#messages').hide;
         $.ajax({
             'url': 'http//localhost:8000/books',
             'success': function(data){
@@ -71,5 +71,26 @@
     function addBook(book){
       $('#booksTable tr:last').after('<tr><td>' + book.title + '</td><td>' + book.id_autor +  '</td><td>' + book.id_genero + '</td></tr>');
     }
+    $('#bookSave').click(function(){
+      var newBook = {
+        'titulo': $('#bookTitle').val(),
+        'id_autor': $('#bookAuthorId').val(),
+        'id_genero': $('#bookGeneroId').val()
+      }
+      $('#messages').first('p').text('Guardando Libro..');
+      $('#messages').show;
+
+
+      $.ajax({
+        'url': 'http//localhost:8000/books',
+        'method': 'POST',
+        'data':JSON.stringify(newBook),
+        'success': function(data){
+          $('#messages').hide;
+          addBook(newBook);
+
+        }
+      });
+    });
   </script>
 </html>

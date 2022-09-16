@@ -66,49 +66,62 @@ $books = [
 	],
 ];
 
-header( 'Content-Type: application/json' );
+// Se indica al cliente que lo que recibirá es un json
+header('Content-Type: application/json');
 
-// LEVANTAMOS EL ID DEL RECURSO BUSCADO
+// Levantamos el id del recurso buscado
+// utilizando un operador ternario
 $resourceId = array_key_exists('resource_id', $_GET) ? $_GET['resource_id'] : '';
 
-/* Checking the request method and then executing the code for that method. */
-$method = $_SERVER['REQUEST_METHOD'];
-
-switch ( strtoupper( $method ) ) {
+// Generamos la respuesta asumiendo que el pedido es correcto
+switch (strtoupper($_SERVER['REQUEST_METHOD'])) {
   case 'GET';
     if( empty($resourceId)){
       echo json_encode($books);
     }else{
       if(array_key_exists( $resourceId, $books )){
         echo json_encode($books[$resourceId]);
-      }else{
-        http_response_code(404);
       }
     }
     break;
-  case 'POST':
-    $json = file_get_contents('php://input');
 
-    $books[] =json_decode($json, true);
-    // emitimos hacia la salida de la ultima clave del array
-    echo array_keys($books)[count($books) -1 ];
-    // echo json_encode($books);
-    break;
-  case 'PUT':
-    //validar que el recurso exista
-    if( !empty($resourceId) && array_key_exists($resourceId, $books)){
-      $json = file_get_contents('php://input');
+	case 'POST':
+		$json = file_get_contents('php://input');
+		$books[] = json_decode($json,true);
+		//echo array_keys($books)[count($books)-1];
+		end($books);         // move the internal pointer to the end of the array
+		$key = key($books);  // fetches the key of the element pointed to by the internal pointer
+		echo json_encode($books[$key]);
+ 		break;
 
-      $books[$resourceId] =json_decode($json, true);
-      echo json_encode($books);
+	case 'PUT':
+		// Validamos que el recurso buscado exista
+		if (!empty($resourceId) && array_key_exists($resourceId,$books)) {
+			// Tomamos la entrada curda
+			$json = file_get_contents('php://input');
 
-    }
-      break;
-  case 'DELETE':
-    if( !empty($resourceId) && array_key_exists($resourceId, $books)){
-      unset($books[$resourceId]);
-    }
-    echo json_encode($books);
-    
-    break;
+			// Tansformamos el json recibido a un nuevo elemento
+			$books[$resourceId] = json_decode($json,true);
+
+			echo json_encode($books[$resourceId]);
+		}
+		break;
+
+	case 'DELETE':
+		// Validamos que el recurso buscado exista
+		if (!empty($resourceId) && array_key_exists($resourceId,$books)) {
+			unset($books[$resourceId]);
+			echo json_encode($books);
+		}
+		break;
 }
+
+
+
+// Inicio el servidor en la terminal 1
+// php -S localhost:8000 server.php
+
+// Terminal 2 ejecutar 
+// curl http://localhost:8000 -v
+// curl http://localhost:8000/\?resource_type\=books
+// curl http://localhost:8000/\?resource_type\=books | jq

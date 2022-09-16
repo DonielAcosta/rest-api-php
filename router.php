@@ -1,6 +1,10 @@
 <?php
 
-$matches = [];
+$matches = $_GET = [];
+if(in_array($_SERVER["REQUEST_URI"], ['/index.html', '/', ''])){
+  echo file_get_contents('index.html');
+  die;
+}
 
 /* Checking the URL for the resource type and resource id. */
 if (preg_match('/\/([^\/]+)\/([^\/]+)/', $_SERVER["REQUEST_URI"], $matches)) {
